@@ -1,6 +1,8 @@
 package com.emp.controller;
 
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,45 +16,52 @@ import org.springframework.web.bind.annotation.RestController;
 import com.emp.DTO.EmpPayRollDTO;
 import com.emp.DTO.ResponseDTO;
 import com.emp.entity.EmpEntity;
-
-
-
-
+import com.emp.service.IEmpService;
 
 @RestController
 public class EmpController {
 
-	@GetMapping("/payRoll")
-	public ResponseEntity<ResponseDTO> payRollemployee(){
-		ResponseDTO response=new ResponseDTO("hello", null);
+	@Autowired
+	private IEmpService empServiceData;
+
+	@GetMapping("/get")
+	public ResponseEntity<ResponseDTO> payRollemployee() {
+		List<EmpEntity> empData = null;
+		empData = empServiceData.getEmpDetails();
+		ResponseDTO response = new ResponseDTO("hello", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/create")
-	public ResponseEntity<ResponseDTO> createEmp(@RequestBody EmpPayRollDTO empdataDTo){
-		EmpEntity empData=null;
-		empData= new EmpEntity(1,empdataDTo);
-		ResponseDTO response=new ResponseDTO("created the data successfully", empData);
+	public ResponseEntity<ResponseDTO> createEmp(@RequestBody EmpPayRollDTO empdataDTo) {
+		EmpEntity empData = null;
+		empData = empServiceData.createEmpDetails(empdataDTo);
+		ResponseDTO response = new ResponseDTO("created the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
+
 	@GetMapping("/get/{id}")
-	public ResponseEntity<ResponseDTO> viewEmp(@PathVariable int id){
-		EmpEntity empData=null;
-		empData=new EmpEntity(id, new EmpPayRollDTO("nithun", 2222));
-		ResponseDTO response=new ResponseDTO("view", empData);
+	public ResponseEntity<ResponseDTO> viewEmp(@PathVariable int id) {
+		EmpEntity empData = null;
+		empData = empServiceData.getEmpDetailsById(1);
+		ResponseDTO response = new ResponseDTO("view", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<ResponseDTO> updateEmp(@RequestBody EmpPayRollDTO empdataDTo){
-		EmpEntity empData=null;
-		empData= new EmpEntity(1,empdataDTo);
-		ResponseDTO response=new ResponseDTO("updated the data successfully", empData);
+	public ResponseEntity<ResponseDTO> updateEmp(@RequestBody EmpPayRollDTO empdataDTo) {
+		EmpEntity empData = null;
+		empData = empServiceData.updateEmpDetails(empdataDTo);
+		ResponseDTO response = new ResponseDTO("updated the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
+
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<ResponseDTO> deleteEmp(@PathVariable int id, EmpPayRollDTO empData){
-		ResponseDTO response=new ResponseDTO("deleted the data successfully",empData);
-		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);	}
-	
+	public ResponseEntity<ResponseDTO> deleteEmp(@PathVariable int id) {
+		 EmpEntity empData = null;
+		empData = empServiceData.deleteEmpDetailsById(id);
+		ResponseDTO response = new ResponseDTO("deleted the data successfully", empData);
+		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
+	}
+
 }
