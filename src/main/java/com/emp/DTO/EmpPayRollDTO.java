@@ -1,14 +1,10 @@
 package com.emp.DTO;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class EmpPayRollDTO {
 
 	public String name;
 	public int salary;
-	public EmpPayRollDTO(String name, int salary) {
-		super();
-		this.name = name;
-		this.salary = salary;
 	}
-
-	
-}
