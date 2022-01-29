@@ -34,7 +34,7 @@ public class EmpController {
 
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDTO> createEmp(@RequestBody EmpPayRollDTO empdataDTo) {
-		List<EmpEntity> empData = null;
+		EmpEntity empData = null;
 		empData = empServiceData.createEmpDetails(empdataDTo);
 		ResponseDTO response = new ResponseDTO("created the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
