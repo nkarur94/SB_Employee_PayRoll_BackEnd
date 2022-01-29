@@ -2,6 +2,8 @@ package com.emp.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,7 @@ public class EmpController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ResponseDTO> createEmp(@RequestBody EmpPayRollDTO empdataDTo) {
+	public ResponseEntity<ResponseDTO> createEmp(@Valid @RequestBody EmpPayRollDTO empdataDTo) {
 		EmpEntity empData = null;
 		empData = empServiceData.createEmpDetails(empdataDTo);
 		ResponseDTO response = new ResponseDTO("created the data successfully", empData);
@@ -49,7 +51,7 @@ public class EmpController {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<ResponseDTO> updateEmp(@PathVariable int id, @RequestBody EmpPayRollDTO empdataDTo) {
+	public ResponseEntity<ResponseDTO> updateEmp(@PathVariable int id,@Valid @RequestBody EmpPayRollDTO empdataDTo) {
 		EmpEntity empData = null;
 		empData = empServiceData.updateEmpDetails(id, empdataDTo);
 		ResponseDTO response = new ResponseDTO("updated the data successfully", empData);

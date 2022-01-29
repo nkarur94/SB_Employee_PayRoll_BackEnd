@@ -12,7 +12,7 @@ public class PayRollEmpApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(PayRollEmpApplication.class, args);
-		log.info("nithun has started coding",context.getEnvironment().getProperty("environment"));
+		log.info("nithun has started running in {} environment ",context.getEnvironment().getProperty("environment"));
 	}
 
 }
