@@ -15,15 +15,20 @@ import com.emp.DTO.ResponseDTO;
 @ControllerAdvice
 public class EmpExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-    
-    public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(
-                    MethodArgumentNotValidException exception){
-            
-            List<ObjectError> errorList = exception.getBindingResult().getAllErrors();
-            List<String> errMsg = errorList.stream()
-                                                    .map(objErr -> objErr.getDefaultMessage())
-                                                    .collect(Collectors.toList());
-            ResponseDTO responseDTO =new ResponseDTO("exception while processing REST calls", errMsg);
-            return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.BAD_REQUEST);
-            }
+
+	public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(
+			MethodArgumentNotValidException exception) {
+
+		List<ObjectError> errorList = exception.getBindingResult().getAllErrors();
+		List<String> errMsg = errorList.stream().map(objErr -> objErr.getDefaultMessage()).collect(Collectors.toList());
+		ResponseDTO responseDTO = new ResponseDTO("exception while processing REST calls", errMsg);
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(EmpCustomExceptionForId.class)
+	public ResponseEntity<ResponseDTO> handleIndexOutOfBondException(EmpCustomExceptionForId exception) {
+		ResponseDTO responseDTO = new ResponseDTO("Exception will executing REST calls", exception.getMessage());
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+	}
+
 }

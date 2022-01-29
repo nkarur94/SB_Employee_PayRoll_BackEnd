@@ -36,24 +36,21 @@ public class EmpController {
 
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDTO> createEmp(@Valid @RequestBody EmpPayRollDTO empdataDTo) {
-		EmpEntity empData = null;
-		empData = empServiceData.createEmpDetails(empdataDTo);
+		EmpEntity empData = empServiceData.createEmpDetails(empdataDTo);
 		ResponseDTO response = new ResponseDTO("created the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/get/{id}")
 	public ResponseEntity<ResponseDTO> viewEmp(@PathVariable int id) {
-		EmpEntity empData = null;
-		empData = empServiceData.getEmpDetailsById(id);
+		EmpEntity empData = empServiceData.getEmpDetailsById(id);
 		ResponseDTO response = new ResponseDTO("view", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<ResponseDTO> updateEmp(@PathVariable int id,@Valid @RequestBody EmpPayRollDTO empdataDTo) {
-		EmpEntity empData = null;
-		empData = empServiceData.updateEmpDetails(id, empdataDTo);
+		EmpEntity empData = empServiceData.updateEmpDetails(id, empdataDTo);
 		ResponseDTO response = new ResponseDTO("updated the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}

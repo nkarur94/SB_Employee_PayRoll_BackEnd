@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.emp.DTO.EmpPayRollDTO;
 import com.emp.entity.EmpEntity;
+import com.emp.exception.EmpCustomExceptionForId;
 
 @Service
 public class EmpService implements IEmpService {
@@ -25,14 +26,10 @@ public class EmpService implements IEmpService {
 	
 	@Override
 	public EmpEntity getEmpDetailsById(int id) {
-		EmpEntity empData = null;
-
-		if (empDataInService.size()<=id-1) {
-			return null;
-		} 
-		else
-			empData = empDataInService.get(id-1);
-			return empData;
+		return empDataInService.stream()
+				.filter(empData -> empData.getId()== id)
+				.findFirst()
+				.orElseThrow(()->new EmpCustomExceptionForId("Employee not found"));
 
 	}
 	
