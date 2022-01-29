@@ -34,7 +34,7 @@ public class EmpController {
 
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDTO> createEmp(@RequestBody EmpPayRollDTO empdataDTo) {
-		EmpEntity empData = null;
+		List<EmpEntity> empData = null;
 		empData = empServiceData.createEmpDetails(empdataDTo);
 		ResponseDTO response = new ResponseDTO("created the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
@@ -43,24 +43,24 @@ public class EmpController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<ResponseDTO> viewEmp(@PathVariable int id) {
 		EmpEntity empData = null;
-		empData = empServiceData.getEmpDetailsById(1);
+		empData = empServiceData.getEmpDetailsById(id);
 		ResponseDTO response = new ResponseDTO("view", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 
-	@PutMapping("/update")
-	public ResponseEntity<ResponseDTO> updateEmp(@RequestBody EmpPayRollDTO empdataDTo) {
+	@PutMapping("/update/{id}")
+	public ResponseEntity<ResponseDTO> updateEmp(@PathVariable int id, @RequestBody EmpPayRollDTO empdataDTo) {
 		EmpEntity empData = null;
-		empData = empServiceData.updateEmpDetails(empdataDTo);
+		empData = empServiceData.updateEmpDetails(id, empdataDTo);
 		ResponseDTO response = new ResponseDTO("updated the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<ResponseDTO> deleteEmp(@PathVariable int id) {
-		 EmpEntity empData = null;
-		empData = empServiceData.deleteEmpDetailsById(id);
-		ResponseDTO response = new ResponseDTO("deleted the data successfully", empData);
+		
+		empServiceData.deleteEmpDetailsById(id);
+		ResponseDTO response = new ResponseDTO("deleted the data successfully","emp id:"+id);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 

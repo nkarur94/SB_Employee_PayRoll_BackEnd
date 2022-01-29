@@ -10,38 +10,44 @@ import com.emp.entity.EmpEntity;
 
 @Service
 public class EmpService implements IEmpService {
+	List<EmpEntity> empDataInService = new ArrayList();
+
 	public List<EmpEntity> getEmpDetails() {
-		List<EmpEntity> empDataInService = new ArrayList();
-		empDataInService.add(new EmpEntity(1, new EmpPayRollDTO("naveen", 433333)));
-		return empDataInService;
+		if (empDataInService.isEmpty()) {
+			return null;
+		} else
+			return empDataInService;
 	}
 
 	public EmpEntity getEmpDetailsById(int id) {
 		EmpEntity empData = null;
-		empData = new EmpEntity(id, new EmpPayRollDTO("nithun", 22222));
-		return empData;
+
+		if (empDataInService.size()<=id-1) {
+			return null;
+		} 
+		else
+			empData = empDataInService.get(id-1);
+			return empData;
 
 	}
 
-	public EmpEntity createEmpDetails(EmpPayRollDTO empDataDto) {
+	public List<EmpEntity> createEmpDetails(EmpPayRollDTO empDataDto) {
 		EmpEntity empData = null;
-		empData = new EmpEntity(1, empDataDto);
+		empData = new EmpEntity(empDataInService.size()+1, empDataDto);
+		empDataInService.add(empData);
+		return empDataInService;
+	}
+
+	public EmpEntity updateEmpDetails(int id, EmpPayRollDTO empDataDto) {
+		EmpEntity empData = this.getEmpDetailsById(id);
+		empData.setName(empDataDto.name);
+		empData.setSalary(empDataDto.salary);
+		empDataInService.set(id-1, empData);
 		return empData;
 	}
 
-	public EmpEntity updateEmpDetails(EmpPayRollDTO empDataDto) {
-		EmpEntity empData = null;
-		empData = new EmpEntity(1, empDataDto);
-		return empData;
-
-	}
-
-	public EmpEntity deleteEmpDetailsById(int id) {
-		List<EmpEntity> empDataToDelete = new ArrayList();
-		empDataToDelete.remove(id);
-		EmpEntity empData = (EmpEntity) empDataToDelete;
-		return empData;
-
+	public void deleteEmpDetailsById(int id) {
+		empDataInService.remove(id-1);
 	}
 
 }
