@@ -1,58 +1,62 @@
 package com.emp.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.emp.DTO.EmpPayRollDTO;
 import com.emp.entity.EmpEntity;
 import com.emp.exception.EmpCustomExceptionForId;
+import com.emp.repository.EmpRepo;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class EmpService implements IEmpService {
-	List<EmpEntity> empDataInService = new ArrayList();
-	private static final AtomicInteger autoId= new AtomicInteger();
+	
+	@Autowired
+	private EmpRepo empRepoInService;
+	
 
 	@Override
 	public List<EmpEntity> getEmpDetails() {
-		if (empDataInService.isEmpty()) {
-			return null;
-		} else
-			return empDataInService;
+		return empRepoInService.findAll();
 	}
 	
 	@Override
 	public EmpEntity getEmpDetailsById(int id) {
-		return empDataInService.stream()
-				.filter(empData -> empData.getId()== id)
-				.findFirst()
-				.orElseThrow(()->new EmpCustomExceptionForId("Employee not found"));
-
+		return empRepoInService.
+				findById(id).
+				orElseThrow( () -> new EmpCustomExceptionForId("employee with empid "+ id +" does not exist!!"));
 	}
 	
 	@Override
+	public List<EmpEntity> getEmpDetailsByDepartment(String department) {
+		return empRepoInService.findEmployeeByDept(department);
+	}
+
+	@Override
 	public EmpEntity createEmpDetails(EmpPayRollDTO empDataDto) {
 		EmpEntity empData = null;
-		empData = new EmpEntity(autoId.incrementAndGet(), empDataDto);
-		empDataInService.add(empData);
-		return empData;
+		empData = new EmpEntity(empDataDto);
+		log.debug("Emp data:"+empData.toString());
+		return empRepoInService.save(empData);
 	}
 	
 	@Override
 	public EmpEntity updateEmpDetails(int id, EmpPayRollDTO empDataDto) {
 		EmpEntity empData = this.getEmpDetailsById(id);
-		empData.setName(empDataDto.name);
-		empData.setSalary(empDataDto.salary);
-		empDataInService.set(id-1, empData);
-		return empData;
+		empData.updatedEmpPayRollDTO(empDataDto);
+		return empRepoInService.save(empData);
 	}
 	
 	@Override
 	public void deleteEmpDetailsById(int id) {
-		empDataInService.remove(id-1);
+		EmpEntity empData = this.getEmpDetailsById(id);
+		empRepoInService.delete(empData);
 	}
 
 }

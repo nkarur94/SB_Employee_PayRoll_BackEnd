@@ -8,6 +8,7 @@ import com.emp.entity.EmpEntity;
 public interface IEmpService {
 	List<EmpEntity> getEmpDetails();
 	EmpEntity getEmpDetailsById(int id);
+	List<EmpEntity> getEmpDetailsByDepartment(String department);
 	EmpEntity createEmpDetails(EmpPayRollDTO empdataDTo);
 	EmpEntity updateEmpDetails(int id,EmpPayRollDTO empdataDTo);
 	void  deleteEmpDetailsById(int id);

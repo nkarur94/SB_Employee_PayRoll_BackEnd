@@ -20,7 +20,10 @@ import com.emp.DTO.ResponseDTO;
 import com.emp.entity.EmpEntity;
 import com.emp.service.IEmpService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
+@Slf4j
 public class EmpController {
 
 	@Autowired
@@ -30,12 +33,13 @@ public class EmpController {
 	public ResponseEntity<ResponseDTO> payRollemployee() {
 		List<EmpEntity> empData = null;
 		empData = empServiceData.getEmpDetails();
-		ResponseDTO response = new ResponseDTO("hello", empData);
+		ResponseDTO response = new ResponseDTO("Employee pay roll", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 	}
 
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDTO> createEmp(@Valid @RequestBody EmpPayRollDTO empdataDTo) {
+		log.debug("Employee DTO:"+empdataDTo.toString());
 		EmpEntity empData = empServiceData.createEmpDetails(empdataDTo);
 		ResponseDTO response = new ResponseDTO("created the data successfully", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
@@ -44,8 +48,16 @@ public class EmpController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<ResponseDTO> viewEmp(@PathVariable int id) {
 		EmpEntity empData = empServiceData.getEmpDetailsById(id);
-		ResponseDTO response = new ResponseDTO("view", empData);
+		ResponseDTO response = new ResponseDTO("view by id", empData);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getDept/{department}")
+	public ResponseEntity<ResponseDTO> getBYDept(@PathVariable String department){
+		List<EmpEntity> empDataList=empServiceData.getEmpDetailsByDepartment(department);
+		ResponseDTO response = new ResponseDTO("view by department", empDataList);
+		return new ResponseEntity<ResponseDTO>(response,HttpStatus.OK);
+		
 	}
 
 	@PutMapping("/update/{id}")
